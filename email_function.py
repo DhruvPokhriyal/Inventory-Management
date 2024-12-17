@@ -1,8 +1,11 @@
 import smtplib
+import json
 from email.message import EmailMessage
 
-MY_EMAIL = ""
-PASSWORD = ""
+with open("email_creds.json", "r") as file:
+    CREDENTIALS = json.load(file)
+    MY_EMAIL = CREDENTIALS["email"]
+    PASSWORD = CREDENTIALS["password"]
 
 
 class Email:
