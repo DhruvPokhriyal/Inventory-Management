@@ -9,6 +9,7 @@ PASSWORD = ""
 with open("email_content.txt") as file:
     msg = EmailMessage()
     mail_template = file.read()
+    msg['From'] = MY_EMAIL
     msg['Subject'] = "Item return"
     msg.set_content(mail_template)
 
@@ -41,4 +42,8 @@ if not values:
 for row in values:
     isDue = datetime.strptime(row[7], dateformat) < datetime.now()
     print(row, "Duedate past:", isDue)
+    if (isDue):
+        msg['To'] = row[3]
+        connection.send_message(msg)
+        print("Message Sent Successfully")
 connection.close()
