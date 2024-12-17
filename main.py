@@ -1,6 +1,10 @@
 from googleapiclient.discovery import build 
 from google.oauth2 import service_account
 from datetime import datetime
+import smtplib
+
+MY_EMAIL = "";
+PASSWORD = "";
 
 acc_scopes = ["https://www.googleapis.com/auth/spreadsheets"]
 spreadsheetid = "1sRZsNiwImNwalonyiKfDyF0N9_UGduJBPYCDwbp-bos"
