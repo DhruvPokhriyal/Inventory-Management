@@ -3,12 +3,11 @@ from google.oauth2 import service_account
 from datetime import datetime
 from email_function import Email
 
-
 email = Email()
 
 acc_scopes = ["https://www.googleapis.com/auth/spreadsheets"]
 spreadsheetid = "1sRZsNiwImNwalonyiKfDyF0N9_UGduJBPYCDwbp-bos"
-#FIXME: Change variable name from range to anything else meaningful since it is shadowing built-in name range which
+# FIXME: Change variable name from range to anything else meaningful since it is shadowing built-in name range which
 # might cause problem in future
 range = "Sheet1!A4:H"  # https://developers.google.com/sheets/api/guides/concepts
 dateformat = "%d/%m/%Y"
@@ -30,7 +29,7 @@ if not values:
 
 for row in values:
     isDue = datetime.strptime(row[7], dateformat) < datetime.now()
-    print(row, "Duedate past:", isDue)
+    print(row, "DueDate past:", isDue)
     if isDue:
         email.set_recipient(row[3])
         email.send_mail()
