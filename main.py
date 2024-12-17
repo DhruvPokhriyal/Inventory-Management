@@ -3,12 +3,12 @@ from google.oauth2 import service_account
 from datetime import datetime
 import smtplib
 
-# MY_EMAIL = "";
-# PASSWORD = "";
-#
-# connection = smtplib.SMTP("smtp.gmail.com")
-# connection.starttls()
-# connection.login(user=MY_EMAIL, password=PASSWORD)
+MY_EMAIL = "";
+PASSWORD = "";
+
+connection = smtplib.SMTP("smtp.gmail.com")
+connection.starttls()
+connection.login(user=MY_EMAIL, password=PASSWORD)
 
 acc_scopes = ["https://www.googleapis.com/auth/spreadsheets"]
 spreadsheetid = "1sRZsNiwImNwalonyiKfDyF0N9_UGduJBPYCDwbp-bos"
@@ -35,4 +35,4 @@ for row in values:
     print(row, "Duedate past:", isDue)
 
 
-# connection.close()
+connection.close()
