@@ -1,21 +1,10 @@
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from datetime import datetime
-import smtplib
-from email.message import EmailMessage
+from email_function import Email
 
-MY_EMAIL = ""
-PASSWORD = ""
-with open("email_content.txt") as file:
-    msg = EmailMessage()
-    mail_template = file.read()
-    msg['From'] = MY_EMAIL
-    msg['Subject'] = "Item return"
-    msg.set_content(mail_template)
 
-connection = smtplib.SMTP("smtp.gmail.com")
-connection.starttls()
-connection.login(user=MY_EMAIL, password=PASSWORD)
+email = Email()
 
 acc_scopes = ["https://www.googleapis.com/auth/spreadsheets"]
 spreadsheetid = "1sRZsNiwImNwalonyiKfDyF0N9_UGduJBPYCDwbp-bos"
@@ -42,8 +31,8 @@ if not values:
 for row in values:
     isDue = datetime.strptime(row[7], dateformat) < datetime.now()
     print(row, "Duedate past:", isDue)
-    if (isDue):
-        msg['To'] = row[3]
-        connection.send_message(msg)
-        print("Message Sent Successfully")
-connection.close()
+    if isDue:
+        email.set_recipient(row[3])
+        email.send_mail()
+
+email.close_connection()
