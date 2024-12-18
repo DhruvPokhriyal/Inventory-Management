@@ -24,6 +24,8 @@ class Email:
             self.msg.set_content(mail_template)
 
     def set_recipient(self, recipient):
+        if self.msg['To']:
+            del self.msg['To']
         self.msg['To'] = recipient
 
     def send_mail(self):
