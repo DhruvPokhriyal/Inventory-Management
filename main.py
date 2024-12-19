@@ -7,17 +7,16 @@ email = Email()
 
 acc_scopes = ["https://www.googleapis.com/auth/spreadsheets"]
 spreadsheetid = "1sRZsNiwImNwalonyiKfDyF0N9_UGduJBPYCDwbp-bos"
-# FIXME: Change variable name range since it is shadowing built-in name range which might cause problem in future
-range = "Sheet1!A4:H"  # https://developers.google.com/sheets/api/guides/concepts
+datarange = "Sheet1!A4:H"  # https://developers.google.com/sheets/api/guides/concepts
 dateformat = "%d/%m/%Y"
 
-credentials = service_account.Credentials.from_service_account_file("creds.json", scopes=acc_scopes)
+credentials = service_account.Credentials.from_service_account_file("sheets_creds.json", scopes=acc_scopes)
 service = build("sheets", "v4", credentials=credentials)
 
 sheet = service.spreadsheets()
 result = (
     sheet.values()
-    .get(spreadsheetId=spreadsheetid, range=range)
+    .get(spreadsheetId=spreadsheetid, range=datarange)
     .execute()
 )
 values = result.get("values", [])

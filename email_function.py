@@ -11,7 +11,6 @@ with open("email_content.txt") as file:
 
 msg_subject = "Item Return"
 
-SERVICE_ACCOUNT_FILE = "creds.json"
 IMPERSONATED_USER = "techmaniacs@iittp.ac.in"
 SCOPES = ["https://mail.google.com", "https://www.googleapis.com/auth/gmail.send"]
 
@@ -27,7 +26,7 @@ def create_gmail_service():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'creds.json', SCOPES)
+                'email_creds.json', SCOPES)
             creds = flow.run_local_server(port=0)
 
         with open('token.pickle', 'wb') as token:
