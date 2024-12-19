@@ -33,4 +33,4 @@ for row in values:
         email.set_recipient(row[3])
         email.send_mail()
 
-email.close_connection()
+
