@@ -1,35 +1,60 @@
-import smtplib
-import json
-from email.message import EmailMessage
+import base64
+from email.mime.text import MIMEText
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+import pickle
+import os
+from google.auth.transport.requests import Request
 
-with open("email_creds.json", "r") as file:
-    CREDENTIALS = json.load(file)
-    MY_EMAIL = CREDENTIALS["email"]
-    PASSWORD = CREDENTIALS["password"]
+with open("email_content.txt") as file:
+    msg_content = file.read()
+
+msg_subject = "Item Return"
+
+SERVICE_ACCOUNT_FILE = "creds.json"
+IMPERSONATED_USER = "techmaniacs@iittp.ac.in"
+SCOPES = ["https://mail.google.com", "https://www.googleapis.com/auth/gmail.send"]
+
+
+def create_gmail_service():
+    creds = None
+    if os.path.exists('token.pickle'):
+        with open('token.pickle', 'rb') as token:
+            creds = pickle.load(token)
+
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'creds.json', SCOPES)
+            creds = flow.run_local_server(port=0)
+
+        with open('token.pickle', 'wb') as token:
+            pickle.dump(creds, token)
+
+    service = build('gmail', 'v1', credentials=creds)
+    return service
 
 
 class Email:
     def __init__(self):
-        self.msg = EmailMessage()
-        self.fill_msg()
-        self.connection = smtplib.SMTP("smtp.gmail.com")
-        self.connection.starttls()
-        self.connection.login(user=MY_EMAIL, password=PASSWORD)
-
-    def fill_msg(self):
-        with open("email_content.txt") as file:
-            mail_template = file.read()
-            self.msg['From'] = MY_EMAIL
-            self.msg['Subject'] = "Item return"
-            self.msg.set_content(mail_template)
+        self.service = create_gmail_service()
+        self.msg = MIMEText(msg_content)
+        self.msg['from'] = IMPERSONATED_USER
+        self.msg['subject'] = msg_subject
 
     def set_recipient(self, recipient):
-        if self.msg['To']:
-            del self.msg['To']
-        self.msg['To'] = recipient
+        if self.msg['to']:
+            del self.msg['to']
+        self.msg['to'] = recipient
 
     def send_mail(self):
-        self.connection.send_message(self.msg)
-
-    def close_connection(self):
-        self.connection.close()
+        raw_msg = base64.urlsafe_b64encode(self.msg.as_bytes()).decode('utf-8')
+        email_message = {'raw': raw_msg}
+        try:
+            sent_message = self.service.users().messages().send(userId="me", body=email_message).execute()
+            print(f"Message sent! Message ID : {sent_message['id']}")
+        except Exception as e:
+            print(f"An error occured {e}")
+            return None
