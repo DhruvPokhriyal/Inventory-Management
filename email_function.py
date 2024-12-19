@@ -12,7 +12,7 @@ with open("email_content.txt") as file:
 msg_subject = "Item Return"
 
 IMPERSONATED_USER = "techmaniacs@iittp.ac.in"
-SCOPES = ["https://mail.google.com", "https://www.googleapis.com/auth/gmail.send"]
+SCOPES = ["https://mail.google.com/", "https://www.googleapis.com/auth/gmail.send"]
 
 
 def create_gmail_service():
@@ -46,7 +46,7 @@ class Email:
     def set_recipient(self, recipient):
         if self.msg['to']:
             del self.msg['to']
-        self.msg['to'] = recipient
+        self.msg['to'] = "ce24b003@iittp.ac.in" #recipient
 
     def send_mail(self):
         raw_msg = base64.urlsafe_b64encode(self.msg.as_bytes()).decode('utf-8')
