@@ -1,9 +1,5 @@
-import json
-from Google import Create_Service
 import base64
-from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 import pickle
