@@ -6,8 +6,9 @@ from email_function import Email
 email = Email()
 
 acc_scopes = ["https://www.googleapis.com/auth/spreadsheets"]
-spreadsheetid = "1sRZsNiwImNwalonyiKfDyF0N9_UGduJBPYCDwbp-bos"
-datarange = "Sheet1!A4:H"  # https://developers.google.com/sheets/api/guides/concepts
+spreadsheetid = "1_lt5a0S2JfNrA7CcJkhQ-39BWbioNwRyAhi4arH0Ngw"
+# datarange needs to be updated every year to point to the correct sheet
+datarange = "2024-2025!B6:I13"  # https://developers.google.com/sheets/api/guides/concepts
 dateformat = "%d/%m/%Y"
 
 credentials = service_account.Credentials.from_service_account_file("sheets_creds.json", scopes=acc_scopes)
@@ -26,10 +27,9 @@ if not values:
     exit()
 
 for row in values:
-    isDue = datetime.strptime(row[7], dateformat) < datetime.now()
+    isDue = datetime.strptime(row[6], dateformat) < datetime.now()
     print(row, "DueDate past:", isDue)
-    if isDue:
-        email.set_recipient(row[3])
-        email.send_mail()
+    if isDue and row[2] == "":
+        email.send_mail(name = row[4], component=row[1], interestgroup=row[0], recipient=f"{row[3].lower()}@iittp.ac.in")
 
 

@@ -1,1 +1,4 @@
-You are past due date. Return the item.
+Hello {name},
+
+You are past due date on the issue of {component}. 
+Please return the item to the head of {interestgroup} interest group of Techmaniacs club.

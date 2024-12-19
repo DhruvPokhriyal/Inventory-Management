@@ -39,16 +39,14 @@ def create_gmail_service():
 class Email:
     def __init__(self):
         self.service = create_gmail_service()
-        self.msg = MIMEText(msg_content)
+
+    def send_mail(self, name, component, interestgroup, recipient):
+        self.msg = MIMEText(msg_content.format(name=name, component=component, interestgroup=interestgroup))
         self.msg['from'] = IMPERSONATED_USER
         self.msg['subject'] = msg_subject
-
-    def set_recipient(self, recipient):
         if self.msg['to']:
             del self.msg['to']
-        self.msg['to'] = "ce24b003@iittp.ac.in" #recipient
-
-    def send_mail(self):
+        self.msg['to'] = recipient
         raw_msg = base64.urlsafe_b64encode(self.msg.as_bytes()).decode('utf-8')
         email_message = {'raw': raw_msg}
         try:
